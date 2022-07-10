@@ -1,2 +1,21 @@
 .card {
+  height: 350px;
+  width: 17rem;
+  margin: 10px;
+  overflow: hidden;
+  cursor: pointer;
+}
+.card-text {
+  overflow: hidden;
+  line-height: 1.5em;
+  height: 3em;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  text-overflow: ellipsis;
+}
+.picture {
+  overflow: hidden;
+  border-radius: 0.25rem;
+  min-height: 200px;
 }

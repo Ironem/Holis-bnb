@@ -1,12 +1,13 @@
 import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import './Search.css';
+import CardRow from '../../components/CardRow/CardRow';
 // import axios from 'axios';
 
 type SearchPageProps = {};
 
 const SearchPage: React.FC<SearchPageProps> = () => {
-  const [collections, setCollections] = useState<any[]>([]);
-  const [filteredCollections, setFilteredCollections] = useState<any>({});
+  const [locations, setlocations] = useState<any[]>([]);
+  const [filteredlocations, setFilteredlocations] = useState<any>({});
 
   // Create a function to fetch all locations from database
   useEffect(() => {
@@ -15,16 +16,29 @@ const SearchPage: React.FC<SearchPageProps> = () => {
     //   .then((res) => {
     //     console.log(res);
     //     if (res.data.length > 0) {
-    //       setCollections(res.data);
+    //       setlocations(res.data);
     //     }
     //   })
     //   .catch((err) => {
     //     console.error(err);
     //   });
-    const mockCollections = [
+    const mocklocations = [
       {
         id: 1,
         title: 'Super Hotel',
+        description:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vestibulum maximus cursus. Nunc aliquam arcu est, quis sodales ante elementum euismod. Curabitur faucibus diam ut facilisis tincidunt. Morbi blandit dui et nunc euismod, nec tristique enim facilisis. Duis sagittis mattis neque, vel iaculis risus pulvinar non.',
+        location: 'London',
+        picture: 'https://cdn.pixabay.com/photo/2016/10/18/09/02/hotel-1749602_1280.jpg',
+        stars: 4,
+        numberOfRooms: 2,
+        price: 90,
+        categoryId: 1,
+        category: { id: 1, name: 'hotel', description: 'Un hotel est un lieu génial' }
+      },
+      {
+        id: 30,
+        title: 'Super Hotel 30',
         description:
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vestibulum maximus cursus. Nunc aliquam arcu est, quis sodales ante elementum euismod. Curabitur faucibus diam ut facilisis tincidunt. Morbi blandit dui et nunc euismod, nec tristique enim facilisis. Duis sagittis mattis neque, vel iaculis risus pulvinar non.',
         location: 'London',
@@ -178,44 +192,59 @@ const SearchPage: React.FC<SearchPageProps> = () => {
         category: { id: 1, name: 'hotel', description: 'Un hotel est un lieu génial' }
       }
     ];
-    setCollections(mockCollections);
+    setlocations(mocklocations);
   }, []);
 
   // Create a function to sort locations by categories & by number of rooms
   useEffect(() => {
-    const newFilterdCollections: any = {};
-    collections.map((collection) => {
-      const existCategories = Object.keys(newFilterdCollections);
-      if (existCategories.includes(collection.category.name)) {
+    const newFilterdlocations: any = {};
+    locations.map((location) => {
+      const existCategories = Object.keys(newFilterdlocations);
+      if (existCategories.includes(location.category.name)) {
         // TODO change id to name
-        const existNumberRoom = Object.keys(newFilterdCollections[collection.category.name]);
-        if (existNumberRoom.includes(collection.numberOfRooms)) {
-          newFilterdCollections[collection.category.name][collection.numberOfRooms].push(
-            collection
-          );
+        const existNumberRoom = Object.keys(newFilterdlocations[location.category.name]);
+        if (existNumberRoom.includes(location.numberOfRooms.toString())) {
+          newFilterdlocations[location.category.name][location.numberOfRooms].push(location);
         } else {
-          newFilterdCollections[collection.category.name][collection.numberOfRooms] = collection;
+          newFilterdlocations[location.category.name][location.numberOfRooms] = [location];
         }
       } else {
         const numberOfRoomsObj: any = {};
-        numberOfRoomsObj[collection.numberOfRooms] = collection;
-        newFilterdCollections[collection.category.name] = numberOfRoomsObj;
+        numberOfRoomsObj[location.numberOfRooms] = [location];
+        newFilterdlocations[location.category.name] = numberOfRoomsObj;
       }
     });
-    setFilteredCollections({ ...newFilterdCollections });
-  }, [collections]);
+    setFilteredlocations({ ...newFilterdlocations });
+  }, [locations]);
 
   // Create a search function linked to the search input in the header
-  const renderCollections: ReactNode = useMemo(() => {
-    const categories = Object.keys(filteredCollections);
-    const collectionCards = categories.map((category, key) => <h3 key={key}>{category}</h3>);
-    return collectionCards;
-  }, [filteredCollections]);
+  const renderlocations: ReactNode = useMemo(() => {
+    const categories = Object.keys(filteredlocations);
+    const locationCards = categories.map((category, key) => {
+      const numberOfRooms = Object.keys(filteredlocations[category]);
+      return (
+        <div key={key + Math.random()}>
+          <h3>{category}</h3>
+          <hr />
+          {numberOfRooms.map((numberOfRooms, key) => {
+            return (
+              <CardRow
+                key={key + Math.random()}
+                numberOfRooms={parseInt(numberOfRooms)}
+                locations={filteredlocations[category][numberOfRooms]}
+              />
+            );
+          })}
+        </div>
+      );
+    });
+    return locationCards;
+  }, [filteredlocations]);
 
   return (
     <div className="search">
       {/* List of sorted locations card */}
-      {renderCollections}
+      {renderlocations}
     </div>
   );
 };
