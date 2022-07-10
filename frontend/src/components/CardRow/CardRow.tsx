@@ -1,9 +1,10 @@
-import React, { ReactNode, useEffect } from 'react';
+import React, { ReactNode, useEffect, useContext } from 'react';
 import Card from '../Card/Card';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import './CardRow.css';
+import Store from '../../store';
 
 type CardRowProps = {
   locations: any[];
@@ -12,12 +13,23 @@ type CardRowProps = {
 
 const CardRow: React.FC<CardRowProps> = ({ locations, numberOfRooms }: CardRowProps) => {
   const [cardRow, setCardRow] = React.useState<ReactNode>([]);
+  const { search, trigger } = useContext(Store);
   useEffect(() => {
     console.log('locations', locations);
-    const displayCardRow = locations.map((location, key) => {
-      return <Card location={location} key={key} />;
-    });
-    const row = (
+    const displayCardRow = locations
+      .filter((location) => {
+        if (search === '') {
+          return true;
+        } else if (location.title.includes(search)) {
+          return true;
+        } else {
+          return false;
+        }
+      })
+      .map((location, key) => {
+        return <Card location={location} key={key} />;
+      });
+    const row = displayCardRow.length > 0 && (
       <Container>
         <Row>
           <Col sm={2}>
@@ -32,7 +44,7 @@ const CardRow: React.FC<CardRowProps> = ({ locations, numberOfRooms }: CardRowPr
       </Container>
     );
     setCardRow(row);
-  }, []);
+  }, [trigger]);
   return <>{cardRow}</>;
 };
 

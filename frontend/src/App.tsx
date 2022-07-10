@@ -10,8 +10,9 @@ axios.defaults.baseURL = 'http://localhost:8000/';
 
 function App() {
   const [search, setSearch] = useState<string>('');
+  const [trigger, setTrigger] = useState(false);
   return (
-    <StoreContext.Provider value={{ search, setSearch }}>
+    <StoreContext.Provider value={{ search, setSearch, trigger, setTrigger }}>
       <Router>
         <Routes>
           <Route element={<Layout />}>

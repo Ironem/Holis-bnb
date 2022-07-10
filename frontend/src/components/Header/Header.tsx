@@ -10,7 +10,7 @@ type HeaderProps = {
 };
 
 const Header: React.FC<HeaderProps> = () => {
-  const { search, setSearch } = useContext(storeContext);
+  const { search, setSearch, trigger, setTrigger } = useContext(storeContext);
   return (
     <div className="header">
       <div className="header__container">
@@ -25,7 +25,7 @@ const Header: React.FC<HeaderProps> = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <div className="search-button">
+          <div className="search-button" onClick={() => setTrigger(!trigger)}>
             <HiSearch />
           </div>
         </div>
