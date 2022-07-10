@@ -40,8 +40,7 @@ const DisplayLocationPage: React.FC<DisplayLocationPageProps> = () => {
     const localLocation = location as Location;
     if (price) localLocation.price = price;
     setLocation({ ...localLocation });
-    axios.patch(`/locations/price/${location!.id}`, { price: location!.price }).then((res) => {
-      console.log('res', res);
+    axios.patch(`/locations/price/${location!.id}`, { price: location!.price }).then(() => {
       alert('Price updated');
     });
   };

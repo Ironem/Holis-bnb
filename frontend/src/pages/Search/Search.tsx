@@ -16,7 +16,6 @@ const SearchPage: React.FC<SearchPageProps> = () => {
     axios
       .get('locations/')
       .then((res) => {
-        console.log(res);
         if (res.data.length > 0) {
           setlocations(res.data);
         }
