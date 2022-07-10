@@ -55,7 +55,12 @@ const DisplayLocationPage: React.FC<DisplayLocationPageProps> = () => {
     <div>
       {/* image */}
       <div className="displayed-img">
-        <img src={location.picture} />
+        <img
+          src={location.picture}
+          style={{
+            marginTop: '-20vh'
+          }}
+        />
       </div>
       <Container style={{ marginTop: 10 }}>
         <Row>
@@ -77,6 +82,7 @@ const DisplayLocationPage: React.FC<DisplayLocationPageProps> = () => {
             </h4>
             {/* category description */}
             <p>{location.category.description}</p>
+            <p>{location.description}</p>
           </Col>
 
           <Col sm={4}>
