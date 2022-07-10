@@ -1,16 +1,18 @@
 import React from 'react';
 import Card from 'react-bootstrap/Card';
+import { useNavigate } from 'react-router-dom';
 
 import './Card.css';
 
 type CardProps = { location: any };
 
 const LocationCard: React.FC<CardProps> = ({ location }: CardProps) => {
+  const navigate = useNavigate();
   const handleClick = () => {
-    console.log('click');
+    navigate('/location/' + location.id, { state: location });
   };
   return (
-    <Card onClick={handleClick}>
+    <Card onClick={handleClick} className="location-card">
       <div className="picture">
         <Card.Img variant="top" src={location.picture} />
       </div>

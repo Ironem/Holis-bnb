@@ -1,8 +1,17 @@
-.display-location {
+.displayed-img {
+  height: 300px;
+  overflow: hidden;
 }
 
-.display-location__content {
+.price-card {
+  max-width: 250px;
 }
 
-.display-location__edit {
+img {
+  width: 100%;
+}
+
+button {
+  margin-right: 10px;
+  margin-top: 10px;
 }

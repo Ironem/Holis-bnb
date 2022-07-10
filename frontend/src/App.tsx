@@ -5,6 +5,7 @@ import Layout from './layouts/Layout';
 import axios from 'axios';
 import StoreContext from './store';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import DisplayLocation from './pages/DisplayLocation/DisplayLocation';
 axios.defaults.baseURL = 'http://localhost:8000/';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <Routes>
           <Route element={<Layout />}>
             <Route index element={<SearchPage />} />
+            <Route path="/location/:id" element={<DisplayLocation />} />
           </Route>
         </Routes>
       </Router>
