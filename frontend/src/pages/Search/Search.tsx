@@ -1,11 +1,13 @@
-import React, { ReactNode, useEffect, useMemo, useState } from 'react';
-import './Search.css';
+import React, { ReactNode, useEffect, useMemo, useState, useContext } from 'react';
 import CardRow from '../../components/CardRow/CardRow';
 import axios from 'axios';
+import Store from '../../store';
+import './Search.css';
 
 type SearchPageProps = {};
 
 const SearchPage: React.FC<SearchPageProps> = () => {
+  const { search, trigger } = useContext(Store);
   const [locations, setlocations] = useState<any[]>([]);
   const [filteredlocations, setFilteredlocations] = useState<any>({});
 
@@ -198,24 +200,33 @@ const SearchPage: React.FC<SearchPageProps> = () => {
   // Create a function to sort locations by categories & by number of rooms
   useEffect(() => {
     const newFilterdlocations: any = {};
-    locations.map((location) => {
-      const existCategories = Object.keys(newFilterdlocations);
-      if (existCategories.includes(location.category.name)) {
-        // TODO change id to name
-        const existNumberRoom = Object.keys(newFilterdlocations[location.category.name]);
-        if (existNumberRoom.includes(location.numberOfRooms.toString())) {
-          newFilterdlocations[location.category.name][location.numberOfRooms].push(location);
+    locations
+      .filter((location) => {
+        if (search === '') {
+          return true;
+        } else if (location.title.includes(search)) {
+          return true;
         } else {
-          newFilterdlocations[location.category.name][location.numberOfRooms] = [location];
+          return false;
         }
-      } else {
-        const numberOfRoomsObj: any = {};
-        numberOfRoomsObj[location.numberOfRooms] = [location];
-        newFilterdlocations[location.category.name] = numberOfRoomsObj;
-      }
-    });
+      })
+      .map((location) => {
+        const existCategories = Object.keys(newFilterdlocations);
+        if (existCategories.includes(location.category.name)) {
+          const existNumberRoom = Object.keys(newFilterdlocations[location.category.name]);
+          if (existNumberRoom.includes(location.numberOfRooms.toString())) {
+            newFilterdlocations[location.category.name][location.numberOfRooms].push(location);
+          } else {
+            newFilterdlocations[location.category.name][location.numberOfRooms] = [location];
+          }
+        } else {
+          const numberOfRoomsObj: any = {};
+          numberOfRoomsObj[location.numberOfRooms] = [location];
+          newFilterdlocations[location.category.name] = numberOfRoomsObj;
+        }
+      });
     setFilteredlocations({ ...newFilterdlocations });
-  }, [locations]);
+  }, [locations, trigger]);
 
   // Create a search function linked to the search input in the header
   const renderlocations: ReactNode = useMemo(() => {
