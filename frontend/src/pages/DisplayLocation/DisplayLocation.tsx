@@ -30,19 +30,25 @@ const DisplayLocationPage: React.FC<DisplayLocationPageProps> = () => {
   }, []);
 
   const handleDelete = () => {
-    axios.delete(`/locations/${location!.id}`).then(() => {
-      alert('Deleted');
-      navigate('/');
-    });
+    axios
+      .delete(`/locations/${location!.id}`)
+      .then(() => {
+        alert('Deleted');
+        navigate('/');
+      })
+      .catch((err) => alert(err));
   };
 
   const handleUpdatePrice = () => {
     const localLocation = location as Location;
     if (price) localLocation.price = price;
     setLocation({ ...localLocation });
-    axios.patch(`/locations/price/${location!.id}`, { price: location!.price }).then(() => {
-      alert('Price updated');
-    });
+    axios
+      .patch(`/locations/price/${location!.id}`, { price: location!.price })
+      .then(() => {
+        alert('Price updated');
+      })
+      .catch((err) => alert(err));
   };
 
   return location !== undefined ? (

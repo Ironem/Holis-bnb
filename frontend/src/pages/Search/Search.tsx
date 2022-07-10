@@ -21,7 +21,7 @@ const SearchPage: React.FC<SearchPageProps> = () => {
         }
       })
       .catch((err) => {
-        console.error(err);
+        alert(err);
       });
     // const mocklocations = [
     //   {
