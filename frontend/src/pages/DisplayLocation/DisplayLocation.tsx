@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import './DisplayLocation.css';
-import { Location } from '../../types';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
@@ -9,20 +7,44 @@ import Row from 'react-bootstrap/Row';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 
+import './DisplayLocation.css';
+import { Location } from '../../types';
+import axios from 'axios';
+
 type DisplayLocationPageProps = {};
 
 const DisplayLocationPage: React.FC<DisplayLocationPageProps> = () => {
   // Create a function to handle price change and persist it to database
   const locationReactObject = useLocation();
+  const navigate = useNavigate();
   const [location, setLocation] = useState<Location | undefined>();
+  const [price, setPrice] = useState<number | undefined>();
 
   // Create a function to delete the location and persist it to database
   useEffect(() => {
-    console.log(locationReactObject);
     if (locationReactObject.state) {
-      setLocation(locationReactObject.state as Location);
+      const localLocation = locationReactObject.state as Location;
+      setLocation(localLocation);
+      setPrice(localLocation.price);
     }
   }, []);
+
+  const handleDelete = () => {
+    axios.delete(`/locations/${location!.id}`).then(() => {
+      alert('Deleted');
+      navigate('/');
+    });
+  };
+
+  const handleUpdatePrice = () => {
+    const localLocation = location as Location;
+    if (price) localLocation.price = price;
+    setLocation({ ...localLocation });
+    axios.patch(`/locations/${location!.id}/price`, { price: location!.price }).then((res) => {
+      console.log('res', res);
+      alert('Price updated');
+    });
+  };
 
   return location !== undefined ? (
     <div>
@@ -59,10 +81,18 @@ const DisplayLocationPage: React.FC<DisplayLocationPageProps> = () => {
             <Card className="price-card">
               <Card.Body>
                 <Card.Title>Modify price</Card.Title>
-                <input value={location.price} />
+                <input
+                  value={price}
+                  onChange={(e) => {
+                    const value = parseInt(e.target.value);
+                    setPrice(isNaN(value) ? 0 : value);
+                  }}
+                />
                 <br />
-                <Button variant="danger">Delete</Button>
-                <Button>Confirm</Button>
+                <Button variant="danger" onClick={handleDelete}>
+                  Delete
+                </Button>
+                <Button onClick={handleUpdatePrice}>Confirm</Button>
               </Card.Body>
             </Card>
           </Col>
