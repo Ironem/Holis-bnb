@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { LocationService } from './Location.service';
 import { CreateLocationDto, UpdateLocationPriceDto } from './Location.dto';
 
@@ -19,7 +27,7 @@ export class LocationController {
   }
 
   // Update the price of the location which has locationId = id
-  @Patch('/:id/price')
+  @Patch('/price/:id')
   updateLocationPrice(
     @Param('id') id: string,
     @Body() updateLocationPriceDto: UpdateLocationPriceDto,
@@ -28,5 +36,11 @@ export class LocationController {
       parseInt(id),
       updateLocationPriceDto,
     );
+  }
+
+  // Delete a location
+  @Delete('/:id')
+  deleteLocation(@Param('id') id: string) {
+    return this.locationService.deleteLocation(parseInt(id));
   }
 }

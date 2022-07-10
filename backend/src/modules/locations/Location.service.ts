@@ -25,4 +25,8 @@ export class LocationService {
   ) {
     return this.locationRepository.update({ id }, updateLocationPriceDto);
   }
+
+  deleteLocation(id: number) {
+    return this.locationRepository.delete({ id });
+  }
 }
