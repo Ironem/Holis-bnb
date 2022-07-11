@@ -248,7 +248,11 @@ const SearchPage: React.FC<SearchPageProps> = () => {
         </div>
       );
     });
-    return locationCards;
+    return locationCards.length > 0 ? (
+      locationCards
+    ) : (
+      <p>There is no location corresponding to your search</p>
+    );
   }, [filteredlocations]);
 
   return (
