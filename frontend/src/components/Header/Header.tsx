@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { HiOutlineMenu, HiOutlineGlobeAlt, HiSearch } from 'react-icons/hi';
 import './Header.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Logo from '../../assets/img/HolisBnb.png';
 import storeContext from '../../store';
 
@@ -11,6 +11,8 @@ type HeaderProps = {
 
 const Header: React.FC<HeaderProps> = () => {
   const { search, setSearch, trigger, setTrigger } = useContext(storeContext);
+  const navigate = useNavigate();
+  const location = useLocation();
   return (
     <div className="header">
       <div className="header__container">
@@ -25,7 +27,14 @@ const Header: React.FC<HeaderProps> = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <div className="search-button" onClick={() => setTrigger(!trigger)}>
+          <div
+            className="search-button"
+            onClick={() => {
+              setTrigger(!trigger);
+              if (location.pathname != '/') {
+                navigate('/');
+              }
+            }}>
             <HiSearch />
           </div>
         </div>
