@@ -43,4 +43,10 @@ export class LocationController {
   deleteLocation(@Param('id') id: string) {
     return this.locationService.deleteLocation(parseInt(id));
   }
+
+  // get a location
+  @Get('/:id')
+  async getLocationById(@Param('id') id: string) {
+    return await this.locationService.getLocationById(parseInt(id));
+  }
 }

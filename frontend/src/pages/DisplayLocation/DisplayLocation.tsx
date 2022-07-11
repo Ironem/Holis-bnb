@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
@@ -16,6 +16,7 @@ type DisplayLocationPageProps = {};
 const DisplayLocationPage: React.FC<DisplayLocationPageProps> = () => {
   // Create a function to handle price change and persist it to database
   const locationReactObject = useLocation();
+  const params = useParams();
   const navigate = useNavigate();
   const [location, setLocation] = useState<Location | undefined>();
   const [price, setPrice] = useState<number | undefined>();
@@ -26,6 +27,15 @@ const DisplayLocationPage: React.FC<DisplayLocationPageProps> = () => {
       const localLocation = locationReactObject.state as Location;
       setLocation(localLocation);
       setPrice(localLocation.price);
+    } else {
+      axios
+        .get(`/locations/${params.id}`)
+        .then((res) => {
+          const localLocation = res.data as Location;
+          setLocation(localLocation);
+          setPrice(localLocation.price);
+        })
+        .catch((err) => alert(err));
     }
   }, []);
 

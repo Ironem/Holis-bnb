@@ -26,6 +26,13 @@ export class LocationService {
     return this.locationRepository.update({ id }, updateLocationPriceDto);
   }
 
+  async getLocationById(id: number) {
+    return await this.locationRepository.findOne({
+      where: { id },
+      relations: ['category'],
+    });
+  }
+
   deleteLocation(id: number) {
     return this.locationRepository.delete({ id });
   }
