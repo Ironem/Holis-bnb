@@ -13,6 +13,13 @@ const Header: React.FC<HeaderProps> = () => {
   const { search, setSearch, trigger, setTrigger } = useContext(storeContext);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const handleSearch = () => {
+    setTrigger(!trigger);
+    if (location.pathname != '/') {
+      navigate('/');
+    }
+  };
   return (
     <div className="header">
       <div className="header__container">
@@ -26,15 +33,13 @@ const Header: React.FC<HeaderProps> = () => {
             placeholder="Search a destination"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-          />
-          <div
-            className="search-button"
-            onClick={() => {
-              setTrigger(!trigger);
-              if (location.pathname != '/') {
-                navigate('/');
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleSearch();
               }
-            }}>
+            }}
+          />
+          <div className="search-button" onClick={handleSearch}>
             <HiSearch />
           </div>
         </div>
